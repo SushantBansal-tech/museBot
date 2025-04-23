@@ -3,10 +3,10 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from chatbot import Chatbot
 import uvicorn
+import uuid
 
-app = FastAPI(title="MuseBot API", description="Multilingual Chatbot API")
+app = FastAPI(title="MuseBot API", description="Multilingual Museum Chatbot API")
 
-# Initialize chatbot
 chatbot = Chatbot()
 
 class MessageRequest(BaseModel):
@@ -17,6 +17,7 @@ class MessageResponse(BaseModel):
     response: str
     detected_language: str
     language_name: str
+    user_id: str
 
 @app.post("/api/chat", response_model=MessageResponse)
 async def chat_endpoint(request: MessageRequest):
@@ -26,8 +27,13 @@ async def chat_endpoint(request: MessageRequest):
     if not request.message or request.message.strip() == "":
         raise HTTPException(status_code=400, detail="Message cannot be empty")
     
+    # Ensure we have a user_id
+    user_id = request.user_id
+    if not user_id:
+        user_id = str(uuid.uuid4())
+    
     # Process the message
-    result = await chatbot.process_message(request.message, request.user_id)
+    result = await chatbot.process_message(request.message, user_id)
     
     if "error" in result:
         raise HTTPException(status_code=500, detail=result["error"])
@@ -35,7 +41,8 @@ async def chat_endpoint(request: MessageRequest):
     return {
         "response": result["text"],
         "detected_language": result["detected_language"],
-        "language_name": result["language_name"]
+        "language_name": result["language_name"],
+        "user_id": user_id
     }
 
 if __name__ == "__main__":
