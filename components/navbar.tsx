@@ -2,12 +2,12 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { LanguageSelector } from "@/components/language-selector"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "../components/ui/button"
+import { LanguageSelector } from "../components/language-selector"
+import { ThemeToggle } from "../components/theme-toggle"
 import { Menu, X } from "lucide-react"
-import { useTranslation } from "@/hooks/use-translation"
-import { useMobile } from "@/hooks/use-mobile"
+import { useTranslation } from "../hooks/use-translation"
+import { useMobile } from "../hooks/use-mobile"
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

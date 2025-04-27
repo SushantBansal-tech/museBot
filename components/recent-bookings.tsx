@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { 
   Table, 
   TableBody, 
@@ -10,7 +10,7 @@ import {
   TableHead, 
   TableHeader, 
   TableRow 
-} from "@/components/ui/table";
+} from "../components/ui/table";
 
 export function RecentBookings() {
   // This would normally be fetched from an API
@@ -116,14 +116,16 @@ export function RecentBookings() {
                 <TableCell>{booking.tickets}</TableCell>
                 <TableCell>{booking.amount}</TableCell>
                 <TableCell>
-                  <Badge 
-                    variant="outline" 
-                    className="capitalize"
-                  >
+                  <Badge variant="outline" className="capitalize flex items-center">
                     <div className={`mr-1.5 h-2 w-2 rounded-full ${getStatusColor(booking.status)}`} />
                     {booking.status}
                   </Badge>
                 </TableCell>
               </TableRow>
-            )
-
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+}
