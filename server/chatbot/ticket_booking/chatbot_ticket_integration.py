@@ -1,5 +1,5 @@
-from ticket_booking.ticket_booking_handler import TicketBookingHandler
-from ticket_booking.museum_data import MuseumDataManager
+from .ticket_booking_handler import TicketBookingHandler
+from .museum_data import MuseumDataManager
 
 class ChatbotTicketIntegration:
     def __init__(self, ticket_handler):

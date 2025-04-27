@@ -6,7 +6,6 @@ from .translation import TranslationManager
 
 class ChatbotModel:
     def __init__(self):
-        # Initialize with a multilingual or English model
         self.model_name = "facebook/blenderbot-400M-distill"
         self.tokenizer = None
         self.model = None
