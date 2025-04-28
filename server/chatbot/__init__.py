@@ -2,7 +2,7 @@
 from .model import ChatbotModel
 from .language_detect import detect_language
 from .translation import TranslationManager
-from ticket_booking import setup_ticket_system
+from .ticket_booking.chatbot_ticket_integration import setup_ticket_system
 import asyncio
 import os
 
