@@ -1,6 +1,6 @@
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { TicketSelector } from "@/components/ticket-selector"
+import { Navbar } from "../../components/navbar"
+import { Footer } from "../../components/footer"
+import { TicketSelector } from "../../components/ticket-selector"
 
 export default function TicketsPage() {
   return (

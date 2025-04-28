@@ -4,15 +4,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from chatbot import Chatbot
 import uvicorn
+<<<<<<< HEAD
 from typing import List, Optional
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.json_util import dumps, loads
 import json
 from datetime import datetime
+=======
+import uuid
+>>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
 
-app = FastAPI(title="MuseBot API", description="Multilingual Chatbot API")
+app = FastAPI(title="MuseBot API", description="Multilingual Museum Chatbot API")
 
+<<<<<<< HEAD
 # Add CORS middleware to allow frontend requests
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +28,8 @@ app.add_middleware(
 )
 
 # Initialize chatbot
+=======
+>>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
 chatbot = Chatbot()
 
 # MongoDB Connection
@@ -40,6 +47,7 @@ class MessageResponse(BaseModel):
     response: str
     detected_language: str
     language_name: str
+    user_id: str
 
 class BookingCreate(BaseModel):
     museumId: str
@@ -65,17 +73,30 @@ async def chat_endpoint(request: MessageRequest):
     """
     if not request.message or request.message.strip() == "":
         raise HTTPException(status_code=400, detail="Message cannot be empty")
+<<<<<<< HEAD
         
     # Process the message
     result = await chatbot.process_message(request.message, request.user_id)
         
+=======
+    
+    # Ensure we have a user_id
+    user_id = request.user_id
+    if not user_id:
+        user_id = str(uuid.uuid4())
+    
+    # Process the message
+    result = await chatbot.process_message(request.message, user_id)
+    
+>>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
     if "error" in result:
         raise HTTPException(status_code=500, detail=result["error"])
         
     return {
         "response": result["text"],
         "detected_language": result["detected_language"],
-        "language_name": result["language_name"]
+        "language_name": result["language_name"],
+        "user_id": user_id
     }
 
 # Museums endpoints
