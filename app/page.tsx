@@ -1,20 +1,23 @@
-import { Hero } from "@/components/hero"
-import { Features } from "@/components/features"
-import { ChatbotDemo } from "@/components/chatbot-demo"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
+import { Hero } from "@/components/hero";
+import { Features } from "@/components/features";
+import { ChatbotDemo } from "@/components/chatbot-demo";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+//import SignIn from "@/components/users"; // Make sure the SignIn component is imported
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1">
+     
+        {/* Optionally, you can conditionally show the sign-in page if the user is not authenticated */}
+       
+
         <Hero />
         <Features />
         <ChatbotDemo />
-      </main>
+      
       <Footer />
     </div>
-  )
+  );
 }
-

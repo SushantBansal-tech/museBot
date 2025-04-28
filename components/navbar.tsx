@@ -5,14 +5,17 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { LanguageSelector } from "@/components/language-selector"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Menu, X } from "lucide-react"
+import { Menu, X, LogIn, LogOut, UserPlus } from "lucide-react"
 import { useTranslation } from "@/hooks/use-translation"
 import { useMobile } from "@/hooks/use-mobile"
+import { useSession, signOut } from "next-auth/react"
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const isMobile = useMobile()
   const { t } = useTranslation()
+  const { data: session, status } = useSession()
+  const isAuthenticated = status === "authenticated"
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -23,7 +26,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">MuseumTix</span>
+            <span className="text-xl font-bold">MuseBot</span>
           </Link>
         </div>
 
@@ -46,9 +49,37 @@ export function Navbar() {
                 <Link href="/contact" onClick={toggleMenu}>
                   {t("contact")}
                 </Link>
-                <Link href="/dashboard" onClick={toggleMenu}>
-                  {t("dashboard")}
-                </Link>
+                {isAuthenticated && (
+                  <Link href="/dashboard" onClick={toggleMenu}>
+                    {t("dashboard")}
+                  </Link>
+                )}
+                
+                {/* Auth links for mobile */}
+                {!isAuthenticated ? (
+                  <>
+                    <Link href="/login" onClick={toggleMenu} className="flex items-center gap-2">
+                      <LogIn className="h-4 w-4" />
+                      {t("login")}
+                    </Link>
+                    <Link href="/register" onClick={toggleMenu} className="flex items-center gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      {t("register")}
+                    </Link>
+                  </>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      signOut({ callbackUrl: "/" })
+                      toggleMenu()
+                    }}
+                    className="flex items-center gap-2 text-left"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    {t("logout")}
+                  </button>
+                )}
+                
                 <div className="flex items-center gap-2">
                   <LanguageSelector />
                   <ThemeToggle />
@@ -71,13 +102,44 @@ export function Navbar() {
               <Link href="/contact" className="font-medium transition-colors hover:text-primary">
                 {t("contact")}
               </Link>
-              <Link href="/dashboard" className="font-medium transition-colors hover:text-primary">
-                {t("dashboard")}
-              </Link>
+              {isAuthenticated && (
+                <Link href="/dashboard" className="font-medium transition-colors hover:text-primary">
+                  {t("dashboard")}
+                </Link>
+              )}
             </nav>
             <div className="flex items-center gap-2">
               <LanguageSelector />
               <ThemeToggle />
+              
+              {/* Auth buttons for desktop */}
+              {!isAuthenticated ? (
+                <>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/login" className="flex items-center gap-2">
+                      <LogIn className="h-4 w-4" />
+                      {t("login")}
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/register" className="flex items-center gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      {t("register")}
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="flex items-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  {t("logout")}
+                </Button>
+              )}
+              
               <Button asChild>
                 <Link href="/chat">{t("book_now")}</Link>
               </Button>
@@ -88,4 +150,3 @@ export function Navbar() {
     </header>
   )
 }
-
