@@ -1,9 +1,9 @@
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { DashboardStats } from "@/components/dashboard-stats"
-import { VisitorChart } from "@/components/visitor-chart"
-import { RecentBookings } from "@/components/recent-bookings"
-import { PopularExhibitions } from "@/components/popular-exhibitions"
+import { Navbar } from "../../components/navbar"
+import { Footer } from "../../components/footer"
+import { DashboardStats } from "../../components/dashboard-stats"
+import { VisitorChart } from "../../components/visitor-chart"
+import { RecentBookings } from "../../components/recent-bookings"
+import { PopularExhibitions } from "../../components/popular-exhibitions"
 
 export default function DashboardPage() {
   return (
