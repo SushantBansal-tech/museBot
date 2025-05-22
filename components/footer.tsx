@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useTranslation } from "@/hooks/use-translation"
+import { useTranslation } from "../hooks/use-translation"
 
 export function Footer() {
   const { t } = useTranslation()

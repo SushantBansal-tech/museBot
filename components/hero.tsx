@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "../components/ui/button"
 import Link from "next/link"
-import { useTranslation } from "@/hooks/use-translation"
+import { useTranslation } from "../hooks/use-translation"
 import Image from "next/image"
 
 export function Hero() {

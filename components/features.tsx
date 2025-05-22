@@ -1,7 +1,7 @@
 "use client"
 
-import { useTranslation } from "@/hooks/use-translation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useTranslation } from "../hooks/use-translation"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Clock, Globe, BarChart, CreditCard, MessageSquare, Shield, Users, Zap } from "lucide-react"
 
 export function Features() {

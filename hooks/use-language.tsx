@@ -1,7 +1,8 @@
 "use client"
 
 import { useContext } from "react"
-import { LanguageContext } from "@/components/language-provider"
+// Update the import path below if the file is not in 'components' at the project root
+import { LanguageContext } from "../components/language-provider"
 
 export function useLanguage() {
   const context = useContext(LanguageContext)

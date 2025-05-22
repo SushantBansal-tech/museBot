@@ -1,15 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useTranslation } from "@/hooks/use-translation"
-import { Label } from "@/components/ui/label"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Button } from "../components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card"
+import { useTranslation } from "../hooks/use-translation"
+import { Label } from "../components/ui/label"
+import { Calendar } from "../components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover"
 import { CalendarIcon, MinusCircle, PlusCircle } from "lucide-react"
 import { format } from "date-fns"
-import { cn } from "@/lib/utils"
+import { cn } from "../lib/utils"
 
 type TicketType = {
   id: string

@@ -6,6 +6,7 @@ import { Input } from "../components/ui/input"
 import { useTranslation } from "../hooks/use-translation"
 import { Send } from "lucide-react"
 import { Avatar, AvatarFallback } from "../components/ui/avatar"
+
 type Museum = {
   _id: string;
   name: string;
@@ -16,11 +17,13 @@ type Museum = {
   timeEnd: string;
   ratings: number;
 }
+
 type Message = {
   role: "user" | "assistant";
   content: string;
   codeSnippet?: string;
 }
+
 type ChatState = {
   step: 'welcome' | 'askName' | 'askAge' | 'showMuseums' | 'conversation' | 'bookingProcess';
   userName: string | null;
@@ -36,6 +39,7 @@ type ChatState = {
   };
   userId?: string;
 }
+
 export function ChatbotDemo() {
   const { t } = useTranslation()
   const [input, setInput] = useState("")
@@ -66,6 +70,7 @@ export function ChatbotDemo() {
       content: t("chatbot_welcome"),
     },
   ])
+
   useEffect(() => {
     // Initial chatbot prompt for name
     if (chatState.step === 'welcome') {
@@ -79,12 +84,14 @@ export function ChatbotDemo() {
       }, 1000)
     }
   }, [])
+
   useEffect(() => {
     // Auto-scroll to the most recent message
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
     }
   }, [messages])
+
   // Enhanced fetchMuseums function for ChatbotDemo.tsx
   const fetchMuseums = async () => {
     try {
@@ -160,38 +167,12 @@ export function ChatbotDemo() {
       setIsLoading(false)
     }
   }
+
   // Add this function to your ChatbotDemo component
-<<<<<<< HEAD
-const createBooking = async () => {
-  console.log("Creating booking with chat state:", chatState);
-  if (!chatState.selectedMuseum || !chatState.bookingDetails) {
-    return false;
-  }
-  
-  try {
-    const bookingData = {
-      museumId: chatState.selectedMuseum._id,
-      visitDate: chatState.bookingDetails.visitDate,
-      visitorCount: chatState.bookingDetails.visitorCount,
-      // Generate a unique chat session ID
-      chatSessionId: `chat-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
-    };
-    
-    const response = await fetch('http://localhost:5000/api/bookings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bookingData),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-=======
   const createBooking = async () => {
+    console.log("Creating booking with chat state:", chatState);
     if (!chatState.selectedMuseum || !chatState.bookingDetails) {
       return false;
->>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
     }
     
     try {
@@ -203,7 +184,7 @@ const createBooking = async () => {
         chatSessionId: `chat-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
       };
       
-      const response = await fetch('/api/bookings', {
+      const response = await fetch('http://localhost:5000/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -227,6 +208,7 @@ const createBooking = async () => {
       return false;
     }
   }
+
   // Function to send message to backend API for code responses
   const sendMessageToBackend = async (userInput: string) => {
     try {
@@ -261,6 +243,7 @@ const createBooking = async () => {
       setIsLoading(false);
     }
   };
+
   // Enhanced process function to handle museum selection and booking
   const processUserInput = async (userInput: string) => {
     // Handle responses based on conversation stage
@@ -280,41 +263,68 @@ const createBooking = async () => {
           }
           setMessages(prev => [...prev, botResponse])
         }, 1000)
-<<<<<<< HEAD
-      }
-      break
-      
-    case 'conversation':
-      // Enhanced handling for museum selection and booking
-      setIsLoading(true)
-      
-      try {
-        const userQuery = userInput.toLowerCase()
-        const matchedMuseums = chatState.museums.filter(museum => 
-          userQuery.includes(museum.name.toLowerCase()) || 
-          userQuery.includes(museum.location.toLowerCase())
-        )
-        console.log("Matched museums: 0987", matchedMuseums);
+        break
         
-        // Check if user wants to visit a specific museum
-        if (userQuery.includes('visit') || userQuery.includes('book') || userQuery.includes('ticket')) {
-          // Try to identify which museum they're interested in
-
-          console.log("Matched museums 1234:", matchedMuseums);
+      case 'askAge':
+        const age = parseInt(userInput)
+        if (isNaN(age)) {
+          // Handle invalid age input
+          setTimeout(() => {
+            const botResponse: Message = {
+              role: "assistant",
+              content: "I'm sorry, I couldn't understand that age. Could you please provide a number?",
+            }
+            setMessages(prev => [...prev, botResponse])
+          }, 1000)
+        } else {
+          // Save age and fetch museums
+          setChatState(prev => ({ 
+            ...prev, 
+            userAge: age,
+            step: 'showMuseums' 
+          }))
           
-          if (matchedMuseums.length > 0) {
-            // Found a specific museum mentioned
-            const selectedMuseum = matchedMuseums[0]
-            
-            // Update chat state to include selected museum
-            setChatState(prev => ({
-              ...prev,
-              selectedMuseum: selectedMuseum,
-              step: 'bookingProcess',
-              bookingStep: 'askVisitDate'
-            }))
+          setTimeout(() => {
+            const botResponse: Message = {
+              role: "assistant",
+              content: `Thanks! I'm fetching museum information for you...`,
+            }
+            setMessages(prev => [...prev, botResponse])
+            fetchMuseums()
+          }, 1000)
+        }
+        break
+        
+      case 'conversation':
+        // Enhanced handling for museum selection and booking
+        setIsLoading(true)
+        
+        try {
+          const userQuery = userInput.toLowerCase()
+          const matchedMuseums = chatState.museums.filter(museum => 
+            userQuery.includes(museum.name.toLowerCase()) || 
+            userQuery.includes(museum.location.toLowerCase())
+          )
+          console.log("Matched museums: 0987", matchedMuseums);
+          
+          // Check if user wants to visit a specific museum
+          if (userQuery.includes('visit') || userQuery.includes('book') || userQuery.includes('ticket')) {
+            // Try to identify which museum they're interested in
 
-            // setTimeout(() => {
+            console.log("Matched museums 1234:", matchedMuseums);
+            
+            if (matchedMuseums.length > 0) {
+              // Found a specific museum mentioned
+              const selectedMuseum = matchedMuseums[0]
+              
+              // Update chat state to include selected museum
+              setChatState(prev => ({
+                ...prev,
+                selectedMuseum: selectedMuseum,
+                step: 'bookingProcess',
+                bookingStep: 'askVisitDate'
+              }))
+
               const botResponse: Message = {
                 role: "assistant",
                 content: `Great choice! The ${selectedMuseum.name} is an excellent museum to visit. When would you like to visit? Please provide a date (e.g., "tomorrow", "next Saturday", or "May 15").`
@@ -324,26 +334,22 @@ const createBooking = async () => {
               console.log("Selected museum:", selectedMuseum);
               createBooking();
               setIsLoading(false)
-            // }, 1000)
-          } else {
-            // User wants to book but didn't specify which museum
-            // setTimeout(() => {
+            } else {
+              // User wants to book but didn't specify which museum
               const botResponse: Message = {
                 role: "assistant",
                 content: "I'd be happy to help you book tickets! Which museum from the list would you like to visit?"
               }
               setMessages(prev => [...prev, botResponse])
               setIsLoading(false)
-            // }, 1000)
-          }
-        } else {
-          // Process general queries about museums
-          const matchedMuseums = chatState.museums.filter(museum => 
-            museum.name.toLowerCase().includes(userQuery) || 
-            museum.location.toLowerCase().includes(userQuery)
-          )
-          
-          // setTimeout(() => {
+            }
+          } else {
+            // Process general queries about museums
+            const matchedMuseums = chatState.museums.filter(museum => 
+              museum.name.toLowerCase().includes(userQuery) || 
+              museum.location.toLowerCase().includes(userQuery)
+            )
+            
             let responseContent = ""
         
             console.log("Matched museums: 7890", matchedMuseums);
@@ -370,188 +376,21 @@ const createBooking = async () => {
               responseContent = `I'm not sure I understood that. Would you like to know more about a specific museum, or would you like to book tickets?`
             }
             
-=======
-        break
-        
-      case 'askAge':
-        const age = parseInt(userInput)
-        if (isNaN(age)) {
-          // Handle invalid age input
-          setTimeout(() => {
->>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
             const botResponse: Message = {
               role: "assistant",
-              content: "I'm sorry, I couldn't understand that age. Could you please provide a number?",
+              content: responseContent
             }
             setMessages(prev => [...prev, botResponse])
-<<<<<<< HEAD
             setIsLoading(false)
-          // }, 1000)
-=======
-          }, 1000)
-        } else {
-          // Save age and fetch museums
-          setChatState(prev => ({ 
-            ...prev, 
-            userAge: age,
-            step: 'showMuseums' 
-          }))
-          
-          setTimeout(() => {
-            const botResponse: Message = {
-              role: "assistant",
-              content: `Thanks! I'm fetching museum information for you...`,
-            }
-            setMessages(prev => [...prev, botResponse])
-            fetchMuseums()
-          }, 1000)
->>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
-        }
-        break
-        
-      case 'conversation':
-        // For code-related requests, check if the input contains code-related keywords
-        const codeKeywords = ['code', 'function', 'example', 'snippet', 'json', 'script', 'api'];
-        const isCodeRequest = codeKeywords.some(keyword => userInput.toLowerCase().includes(keyword));
-        
-<<<<<<< HEAD
-        setTimeout(() => {
+          }
+        } catch (error) {
+          console.error("Error processing user query:", error)
           const botResponse: Message = {
             role: "assistant",
-            content: `Perfect! Here's your booking summary:\n\n` +
-              `Museum: ${selectedMuseum?.name || "Unknown Museum"}\n` +
-              `Date: ${chatState.bookingDetails?.visitDate ?? "Not specified"}\n` +
-              `Number of visitors: ${visitorCount}\n` +
-              `Total price: ${totalAmount}\n\n` +
-              `Would you like to confirm this booking? (Yes/No)`
+            content: "I'm sorry, I had trouble processing your request. Could you try asking in a different way?"
           }
           setMessages(prev => [...prev, botResponse])
           setIsLoading(false)
-        }, 1000)
-      }
-      break
-      
-    case 'confirmBooking':
-      if (userInput.toLowerCase().includes('yes') || userInput.toLowerCase().includes('confirm')) {
-        // Process the booking
-        try {
-          setIsLoading(true);
-          // Call the createBooking function instead of just simulating
-          const bookingResult = await createBooking();
-          
-
-          if (bookingResult) {
-=======
-        if (isCodeRequest) {
-          // If it might be a code request, use the backend API
-          const response = await sendMessageToBackend(userInput);
-          
-          const botResponse: Message = {
-            role: "assistant",
-            content: response.response,
-            codeSnippet: response.codeSnippet
-          };
-          
-          setMessages(prev => [...prev, botResponse]);
-          
-        } else {
-          // Continue with normal conversation flow
-          setIsLoading(true)
-          
-          try {
-            const userQuery = userInput.toLowerCase()
-            
-            // Check if user wants to visit a specific museum
-            if (userQuery.includes('visit') || userQuery.includes('book') || userQuery.includes('ticket')) {
-              // Try to identify which museum they're interested in
-              const matchedMuseums = chatState.museums.filter(museum => 
-                userQuery.includes(museum.name.toLowerCase()) || 
-                userQuery.includes(museum.location.toLowerCase())
-              )
-              
-              if (matchedMuseums.length > 0) {
-                // Found a specific museum mentioned
-                const selectedMuseum = matchedMuseums[0]
-                
-                // Update chat state to include selected museum
-                setChatState(prev => ({
-                  ...prev,
-                  selectedMuseum: selectedMuseum,
-                  step: 'bookingProcess',
-                  bookingStep: 'askVisitDate'
-                }))
-                setTimeout(() => {
-                  const botResponse: Message = {
-                    role: "assistant",
-                    content: `Great choice! The ${selectedMuseum.name} is an excellent museum to visit. When would you like to visit? Please provide a date (e.g., "tomorrow", "next Saturday", or "May 15").`
-                  }
-                  console.log("Selected museum:", selectedMuseum);
-                  setMessages(prev => [...prev, botResponse])
-                  setIsLoading(false)
-                }, 1000)
-              } else {
-                // User wants to book but didn't specify which museum
-                setTimeout(() => {
-                  const botResponse: Message = {
-                    role: "assistant",
-                    content: "I'd be happy to help you book tickets! Which museum from the list would you like to visit?"
-                  }
-                  setMessages(prev => [...prev, botResponse])
-                  setIsLoading(false)
-                }, 1000)
-              }
-            } else {
-              // Process general queries about museums
-              const matchedMuseums = chatState.museums.filter(museum => 
-                museum.name.toLowerCase().includes(userQuery) || 
-                museum.location.toLowerCase().includes(userQuery)
-              )
-              
-              setTimeout(() => {
-                let responseContent = ""
-                console.log("Matched museums:", matchedMuseums);
-                
-                if (matchedMuseums.length > 0) {
-                  const museum = matchedMuseums[0]
-                  responseContent = `Here's more information about ${museum.name}:\n\n` +
-                    `📍 Location: ${museum.location}\n` +
-                    `💰 Ticket Price: $${museum.ticketPrice}\n` +
-                    `🕒 Hours: ${museum.timeStart} - ${museum.timeEnd}\n` +
-                    `⭐ Rating: ${museum.ratings}/5\n\n` +
-                    `${museum.description}\n\n` +
-                    `Would you like to book tickets for this museum?`
-                } else if (userQuery.includes("list") || userQuery.includes("show") || userQuery.includes("museums")) {
-                  // User wants to see the list again
-                  responseContent = "Here are the museums again:\n\n"
-                  chatState.museums.forEach((museum, index) => {
-                    responseContent += `${index + 1}. ${museum.name} - ${museum.location}\n` +
-                      `   Price: $${museum.ticketPrice} | Hours: ${museum.timeStart}-${museum.timeEnd}\n` +
-                      `   Rating: ${museum.ratings}/5\n\n`
-                  })
-                  responseContent += "Would you like more information about any of these museums?"
-                } else {
-                  responseContent = `I'm not sure I understood that. Would you like to know more about a specific museum, or would you like to book tickets?`
-                }
-                
-                const botResponse: Message = {
-                  role: "assistant",
-                  content: responseContent
-                }
-                setMessages(prev => [...prev, botResponse])
-                setIsLoading(false)
-              }, 1000)
-            }
-          } catch (error) {
-            console.error("Error processing user query:", error)
-            setTimeout(() => {
-              const botResponse: Message = {
-                role: "assistant",
-                content: "I'm sorry, I had trouble processing your request. Could you try asking in a different way?"
-              }
-              setMessages(prev => [...prev, botResponse])
-              setIsLoading(false)
-            }, 1000)
-          }
         }
         break
         
@@ -576,9 +415,10 @@ const createBooking = async () => {
             setMessages(prev => [...prev, botResponse]);
           }, 1000);
         } else if (chatState.bookingStep === 'askVisitorCount') {
-          const count = parseInt(userInput);
+          const visitorCount = parseInt(userInput);
+          const selectedMuseum = chatState.selectedMuseum;
           
-          if (isNaN(count) || count <= 0) {
+          if (isNaN(visitorCount) || visitorCount <= 0) {
             setTimeout(() => {
               const botResponse: Message = {
                 role: "assistant",
@@ -587,16 +427,15 @@ const createBooking = async () => {
               setMessages(prev => [...prev, botResponse]);
             }, 1000);
           } else {
-            // Calculate total amount
-            const totalAmount = count * (chatState.selectedMuseum?.ticketPrice || 0);
+            // Calculate total amount and move to confirmation
+            const totalAmount = visitorCount * (selectedMuseum?.ticketPrice || 0);
             
->>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
             setChatState(prev => ({
               ...prev,
               bookingDetails: {
                 ...prev.bookingDetails,
-                visitorCount: count,
-                totalAmount
+                visitorCount: visitorCount,
+                totalAmount: totalAmount
               },
               bookingStep: 'confirmBooking'
             }));
@@ -604,42 +443,62 @@ const createBooking = async () => {
             setTimeout(() => {
               const botResponse: Message = {
                 role: "assistant",
-                content: `Your booking details: ${chatState.selectedMuseum?.name} on ${chatState.bookingDetails?.visitDate} for ${count} people. Total: $${totalAmount}. Would you like to confirm this booking?`
-              };
-              setMessages(prev => [...prev, botResponse]);
-            }, 1000);
+                content: `Perfect! Here's your booking summary:\n\n` +
+                  `Museum: ${selectedMuseum?.name || "Unknown Museum"}\n` +
+                  `Date: ${chatState.bookingDetails?.visitDate ?? "Not specified"}\n` +
+                  `Number of visitors: ${visitorCount}\n` +
+                  `Total price: ${totalAmount}\n\n` +
+                  `Would you like to confirm this booking? (Yes/No)`
+              }
+              setMessages(prev => [...prev, botResponse])
+              setIsLoading(false)
+            }, 1000)
           }
         } else if (chatState.bookingStep === 'confirmBooking') {
           if (userInput.toLowerCase().includes('yes') || userInput.toLowerCase().includes('confirm')) {
             // Process the booking
-            setIsLoading(true);
-            const booking = await createBooking();
-            setIsLoading(false);
-            
-            if (booking) {
-              setChatState(prev => ({
-                ...prev,
-                bookingDetails: {
-                  ...prev.bookingDetails,
-                  bookingId: booking.bookingId
-                },
-                bookingStep: 'bookingComplete'
-              }));
+            try {
+              setIsLoading(true);
+              // Call the createBooking function instead of just simulating
+              const bookingResult = await createBooking();
               
-              setTimeout(() => {
-                const botResponse: Message = {
-                  role: "assistant",
-                  content: `Great! Your booking has been confirmed. Your booking ID is ${booking.bookingId}. I hope you enjoy your visit!`
-                };
-                setMessages(prev => [...prev, botResponse]);
-              }, 1000);
-            } else {
+              if (bookingResult) {
+                setChatState(prev => ({
+                  ...prev,
+                  bookingDetails: {
+                    ...prev.bookingDetails,
+                    bookingId: bookingResult.bookingId
+                  },
+                  bookingStep: 'bookingComplete'
+                }));
+                
+                setTimeout(() => {
+                  const botResponse: Message = {
+                    role: "assistant",
+                    content: `Great! Your booking has been confirmed. Your booking ID is ${bookingResult.bookingId}. I hope you enjoy your visit!`
+                  };
+                  setMessages(prev => [...prev, botResponse]);
+                  setIsLoading(false);
+                }, 1000);
+              } else {
+                setTimeout(() => {
+                  const botResponse: Message = {
+                    role: "assistant",
+                    content: "I'm sorry, there was an error processing your booking. Please try again later."
+                  };
+                  setMessages(prev => [...prev, botResponse]);
+                  setIsLoading(false);
+                }, 1000);
+              }
+            } catch (error) {
+              console.error("Booking error:", error);
               setTimeout(() => {
                 const botResponse: Message = {
                   role: "assistant",
                   content: "I'm sorry, there was an error processing your booking. Please try again later."
                 };
                 setMessages(prev => [...prev, botResponse]);
+                setIsLoading(false);
               }, 1000);
             }
           } else {
@@ -674,6 +533,7 @@ const createBooking = async () => {
         setMessages(prev => [...prev, defaultMessage]);
     }
   };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -692,6 +552,7 @@ const createBooking = async () => {
     // Process the user input based on the current chat state
     await processUserInput(input);
   };
+
   // Helper function to render message content with code blocks
   const renderMessageContent = (message: Message) => {
     if (message.codeSnippet) {
@@ -714,6 +575,7 @@ const createBooking = async () => {
     // Regular message without code
     return <p className="text-sm">{message.content}</p>;
   };
+
   return (
     <Card className="w-full shadow-md border border-gray-200 max-w-4xl mx-auto">
       <CardHeader className="bg-primary text-white p-4 flex flex-row items-center space-y-0 gap-3">

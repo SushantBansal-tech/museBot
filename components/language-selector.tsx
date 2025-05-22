@@ -1,8 +1,8 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Button } from "../components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu"
 import { Globe } from "lucide-react"
-import { useLanguage } from "@/hooks/use-language"
+import { useLanguage } from "../hooks/use-language"
 
 export function LanguageSelector() {
   const { language, setLanguage } = useLanguage()

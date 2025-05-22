@@ -1,7 +1,7 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Chart, ChartContainer, ChartTooltip, ChartLegend, ChartLegendItem } from "@/components/ui/chart"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { Chart, ChartContainer, ChartTooltip, ChartLegend, ChartLegendItem } from "../components/ui/chart"
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
 
 export function VisitorChart() {
@@ -25,10 +25,12 @@ export function VisitorChart() {
       <CardContent>
         <div className="h-[300px]">
           <ChartContainer>
-            <ChartLegend className="mb-4">
-              <ChartLegendItem name="In-person Visitors" color="#0ea5e9" />
-              <ChartLegendItem name="Online Bookings" color="#8b5cf6" />
-            </ChartLegend>
+            <div className="mb-4">
+              <ChartLegend>
+                <ChartLegendItem name="In-person Visitors" color="#0ea5e9" />
+                <ChartLegendItem name="Online Bookings" color="#8b5cf6" />
+              </ChartLegend>
+            </div>
             <Chart>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
