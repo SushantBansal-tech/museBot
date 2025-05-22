@@ -2,22 +2,17 @@
 
 import Link from "next/link"
 import { useState } from "react"
-<<<<<<< HEAD
-import { Button } from "@/components/ui/button"
-import { LanguageSelector } from "@/components/language-selector"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Menu, X, LogIn, LogOut, UserPlus } from "lucide-react"
-import { useTranslation } from "@/hooks/use-translation"
-import { useMobile } from "@/hooks/use-mobile"
+
 import { useSession, signOut } from "next-auth/react"
-=======
+
 import { Button } from "../components/ui/button"
 import { LanguageSelector } from "../components/language-selector"
 import { ThemeToggle } from "../components/theme-toggle"
-import { Menu, X } from "lucide-react"
+import { Menu, X, LogIn, UserPlus, LogOut } from "lucide-react"
+
 import { useTranslation } from "../hooks/use-translation"
 import { useMobile } from "../hooks/use-mobile"
->>>>>>> 98b11b37ee556358b2ef7fdc14c5678342628e26
+
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
